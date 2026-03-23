@@ -163,7 +163,7 @@
 
         <h3>Semantic Segmentation</h3>
         <div style="display: flex; justify-content: center">
-            <video controls autoplay loop muted style="max-width: 100%; height: auto">
+            <video autoplay loop muted playsinline webkit-playsinline preload="auto" style="max-width: 100%; height: auto">
                 <source src="https://github.com/user-attachments/assets/bd8d4a87-ac6f-4464-99db-39e07ee866c9" type="video/mp4" />
             </video>
         </div>
@@ -316,6 +316,26 @@
                     const paperUrl = refElement.querySelector("#paper_url").innerHTML;
                     window.open(paperUrl, "_blank");
                 });
+            });
+
+            const autoplayVideos = document.querySelectorAll("video[autoplay][muted]");
+            autoplayVideos.forEach((video) => {
+                video.playsInline = true;
+                const tryPlay = () => {
+                    video.play().catch(() => {
+                        // Ignore autoplay rejections on strict browser settings.
+                    });
+                };
+
+                video.addEventListener("loadeddata", tryPlay);
+                video.addEventListener("canplay", tryPlay);
+                document.addEventListener("visibilitychange", () => {
+                    if (!document.hidden) {
+                        tryPlay();
+                    }
+                });
+
+                tryPlay();
             });
 
             const videos = document.querySelectorAll(".video-compare");
