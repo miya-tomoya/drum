@@ -26,6 +26,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [["\\(", "\\)"], ["$", "$"]],
+            },
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <script>
         hljs.highlightAll();
     </script>
 
@@ -43,7 +51,7 @@
         </h1>
         <h5 class="conference">ICRA 2026</h5>
         <h5 class="authors">
-            <a href="https://robotics.ait.kyushu-u.ac.jp/en/" target="_blank" rel="noopener">Tomoya
+            <a href="https://miyawakitomoya.com/" target="_blank" rel="noopener">Tomoya
                 Miyawaki</a><sup>1</sup>
             &nbsp;&nbsp;&nbsp;
             <a href="https://kazuto1011.github.io/" target="_blank" rel="noopener">Kazuto Nakashima</a><sup>1</sup>
@@ -85,6 +93,12 @@
 
     <div class="container content">
         <h2>Goal: Sim2Real LiDAR Segmentation</h2>
+
+        <p style="text-align: justify">
+            LiDAR simulators provide perfect semantic labels but lack realistic sensor characteristics, leading to a performance
+            drop on real-world data. DRUM bridges this gap by synthesizing pseudo-real samples that combine simulator-provided
+            annotations with realistic reflectance intensity and raydrop noise.
+        </p>
 
         <div class="goal-table-wrapper">
             <table class="table table-hover align-middle mt-3 mb-4 goal-table">
@@ -139,10 +153,22 @@
         <h2>Method: <span style="color: #5f53c7">DRUM</span></h2>
 
         <h3>Posterior Sampling using Diffusion Models</h3>
+        <p style="text-align: justify">
+            We formulate Sim2Real translation as a posterior sampling process. A diffusion model, pre-trained on real-world data to
+            capture its underlying distribution, serves as a generative prior.
+            In our approach, the unconditional generation process of diffusion models is conditioned by the masked
+            guidance with the simulation sample.
+        </p>
         <img src="https://github.com/user-attachments/assets/0fb5d9b5-81c2-42f9-a58d-1da0d26d98d5"
             alt="Posterior Sampling using Diffusion Models" />
 
         <h3>Raydrop-aware Masked Guidance</h3>
+        <p style="text-align: justify">
+            In masked guidance, we first generate the raydrop-aware \(m_t\) mask from the tentative Tweedie sample
+            \(\hat{x}_t\) and then compute the sim-real discrepancy based on the pseudoinverse method. The operator
+            \(H\) corrupts the reflectance
+            modality.
+        </p>
         <img src="https://github.com/user-attachments/assets/814e050f-468d-4c6d-9eba-9199ceb70a5e" alt="Raydrop-aware Masked Guidance" />
     </div>
 
@@ -162,6 +188,7 @@
         </div>
 
         <h3>Semantic Segmentation</h3>
+        19-class semantic segmentation on SemanticKITTI dataset <span class="reference" data-ref="ran2024">[Ran et al. 2024]</span>.
         <div style="display: flex; justify-content: center">
             <video autoplay loop muted playsinline webkit-playsinline preload="auto" style="max-width: 100%; height: auto">
                 <source src="https://github.com/user-attachments/assets/bd8d4a87-ac6f-4464-99db-39e07ee866c9" type="video/mp4" />
