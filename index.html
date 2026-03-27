@@ -1,206 +1,191 @@
 <!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>DRUM: Diffusion-based Raydrop-aware Unpaired Mapping for Sim2Real LiDAR Segmentation</title>
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>DRUM: Diffusion-based Raydrop-aware Unpaired Mapping for Sim2Real LiDAR Segmentation</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+            crossorigin="anonymous" />
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+            crossorigin="anonymous"></script>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous" />
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-        crossorigin="anonymous"></script>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+            integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer" />
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
-        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+        <script>
+            window.MathJax = {
+                tex: {
+                    inlineMath: [
+                        ["\\(", "\\)"],
+                        ["$", "$"],
+                    ],
+                },
+            };
+        </script>
+        <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+        <script>
+            hljs.highlightAll();
+        </script>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Barlow+Semi+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="css/main.css" />
+    </head>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script>
-        window.MathJax = {
-            tex: {
-                inlineMath: [["\\(", "\\)"], ["$", "$"]],
-            },
-        };
-    </script>
-    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-    <script>
-        hljs.highlightAll();
-    </script>
-
-    <link rel="stylesheet" type="text/css" href="css/main.css" />
-</head>
-
-<body>
-    <div class="container header">
-        <h1 class="title">
-            <span class="method-text"><i class="fa-solid fa-drum"></i> DRUM</span>: <span
-                style="color: #5f53c7">D</span>iffusion-based
-            <span style="color: #5f53c7">R</span>aydrop-aware <span style="color: #5f53c7">U</span>npaired <span
-                style="color: #5f53c7">M</span>apping for
-            Sim2Real LiDAR Segmentation
-        </h1>
-        <h5 class="conference">ICRA 2026</h5>
-        <h5 class="authors">
-            <a href="https://miyawakitomoya.com/" target="_blank" rel="noopener">Tomoya
-                Miyawaki</a><sup>1</sup>
-            &nbsp;&nbsp;&nbsp;
-            <a href="https://kazuto1011.github.io/" target="_blank" rel="noopener">Kazuto Nakashima</a><sup>1</sup>
-            &nbsp;&nbsp;&nbsp;
-            <a href="https://www-robotics.jpl.nasa.gov/who-we-are/people/yumi_iwashita/" target="_blank"
-                rel="noopener">Yumi Iwashita</a><sup>2</sup>
-            &nbsp;&nbsp;&nbsp;
-            <a href="https://robotics.ait.kyushu-u.ac.jp/kurazume/en/" target="_blank" rel="noopener">Ryo
-                Kurazume</a><sup>1</sup>
-        </h5>
-        <h5 class="affiliations"><sup>1</sup>Kyushu University, Japan&nbsp;&nbsp;&nbsp;<sup>2</sup>Jet Propulsion
-            Laboratory, USA</h5>
-        <div class="materials">
-            <a href="" class="btn btn-primary"><i class="fa-solid fa-file-pdf"></i> Paper</a>
-            <a href="" class="btn btn-primary"><i class="fa-brands fa-github"></i> Code</a>
-            <a href="" class="btn btn-primary" aria-disabled="true"><i class="fa-solid fa-play"></i> Demo</a>
-        </div>
-    </div>
-
-    <div class="container content">
-        <h5><b>TL;DR:</b> Sim2Real domain translation of LiDAR data using diffusion models.</h5>
-    </div>
-
-    <div class="container content">
-        <h2>Overview</h2>
-        <p style="text-align: justify">
-            LiDAR-based semantic segmentation is a key component for autonomous mobile robots, yet large-scale
-            annotation of LiDAR point clouds is prohibitively expensive and time-consuming. Although simulators can
-            provide labeled synthetic data, models trained on synthetic data often underperform on real-world data due
-            to a data-level domain gap. To address this issue, we propose DRUM, a novel Sim2Real translation framework.
-            We leverage a diffusion model pre-trained on unlabeled real-world data as a generative prior and translate
-            synthetic data by reproducing two key measurement characteristics: reflectance intensity and raydrop noise.
-            To improve sample fidelity, we introduce a raydrop-aware masked guidance mechanism that selectively enforces
-            consistency with the input synthetic data while preserving realistic raydrop noise induced by the diffusion
-            prior. Experimental results demonstrate that DRUM consistently improves Sim2Real performance across multiple
-            representations of LiDAR data.
-        </p>
-    </div>
-
-    <div class="container content">
-        <h2>Goal: Sim2Real LiDAR Segmentation</h2>
-
-        <p style="text-align: justify">
-            LiDAR simulators provide perfect semantic labels but lack realistic sensor characteristics, leading to a performance
-            drop on real-world data. DRUM bridges this gap by synthesizing pseudo-real samples that combine simulator-provided
-            annotations with realistic reflectance intensity and raydrop noise.
-        </p>
-
-        <div class="goal-table-wrapper">
-            <table class="table table-hover align-middle mt-3 mb-4 goal-table">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th scope="col" style="width: 30%">Simulation</th>
-                        <th scope="col" style="width: 30%">Pseudo-real</th>
-                        <th scope="col" style="width: 30%">Real</th>
-                    </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                    <tr>
-                        <td class="table-active">Range</td>
-                        <td><img class="goal-image" src="images/sim-depth.png" alt="sim-depth" /></td>
-                        <td><img class="goal-image" src="images/pseudoreal-depth.png" alt="pseudoreal-depth" /></td>
-                        <td><img class="goal-image" src="images/real-depth.png" alt="real-depth" /></td>
-                    </tr>
-                    <tr>
-                        <td class="table-active">Reflectance</td>
-                        <td>N/A</td>
-                        <td><img class="goal-image" src="images/pseudoreal-reflectance.png" alt="pseudoreal-reflectance" /></td>
-                        <td><img class="goal-image" src="images/real-reflectance.png" alt="real-reflectance" /></td>
-                    </tr>
-                    <tr>
-                        <td class="table-active">Raydrop</td>
-                        <td>N/A</td>
-                        <td><img class="goal-image" src="images/pseudoreal-raydrop.png" alt="pseudoreal-raydrop" /></td>
-                        <td><img class="goal-image" src="images/real-raydrop.png" alt="real-raydrop" /></td>
-                    </tr>
-                    <tr>
-                        <td class="table-active">Label</td>
-                        <td><img class="goal-image" src="images/label.png" alt="label" /></td>
-                        <td><img class="goal-image" src="images/label.png" alt="label" /></td>
-                        <td>N/A</td>
-                    </tr>
-                    <tr>
-                        <td class="table-primary">Datasets</td>
-                        <td>
-                            SynLiDAR&nbsp;<span class="reference" data-ref="zyrianov2022">[Zyrianov et al.
-                                2022]</span><br />
-                            GTA-LiDAR&nbsp;<span class="reference" data-ref="nakashima2024">[Nakashima et al.
-                                2024]</span><br />
-                        </td>
-                        <td><b>Ours</b></td>
-                        <td>SemanticKITTI&nbsp;<span class="reference" data-ref="ran2024">[Ran et al. 2024]</span></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <h2>Method: <span style="color: #5f53c7">DRUM</span></h2>
-
-        <h3>Posterior Sampling using Diffusion Models</h3>
-        <p style="text-align: justify">
-            We formulate Sim2Real translation as a posterior sampling process. A diffusion model, pre-trained on real-world data to
-            capture its underlying distribution, serves as a generative prior.
-            In our approach, the unconditional generation process of diffusion models is conditioned by the masked
-            guidance with the simulation sample.
-        </p>
-        <img src="https://github.com/user-attachments/assets/0fb5d9b5-81c2-42f9-a58d-1da0d26d98d5"
-            alt="Posterior Sampling using Diffusion Models" />
-
-        <h3>Raydrop-aware Masked Guidance</h3>
-        <p style="text-align: justify">
-            In masked guidance, we first generate the raydrop-aware \(m_t\) mask from the tentative Tweedie sample
-            \(\hat{x}_t\) and then compute the sim-real discrepancy based on the pseudoinverse method. The operator
-            \(H\) corrupts the reflectance
-            modality.
-        </p>
-        <img src="https://github.com/user-attachments/assets/814e050f-468d-4c6d-9eba-9199ceb70a5e" alt="Raydrop-aware Masked Guidance" />
-    </div>
-
-    <div class="container content">
-        <h2>Results</h2>
-
-        <h3>Pseudo-real Samples</h3>
-
-        <div style="display: flex; justify-content: center">
-            <div class="video-compare">
-                <img id="video-left"
-                    src="https://github.com/user-attachments/assets/1ecb4401-9880-4e5d-ae2e-30934ab88634" alt="sim"></img>
-                <img id="video-right"
-                    src="https://github.com/user-attachments/assets/949ef848-3d17-4c8c-9ba6-b2f86044f995" alt="real"></img>
-                <div id="slider"></div>
+    <body>
+        <div class="container header">
+            <h1 class="title">
+                <span class="method-text"><i class="fa-solid fa-drum"></i> DRUM</span>: <span style="color: #5f53c7">D</span>iffusion-based
+                <span style="color: #5f53c7">R</span>aydrop-aware <span style="color: #5f53c7">U</span>npaired
+                <span style="color: #5f53c7">M</span>apping for Sim2Real LiDAR Segmentation
+            </h1>
+            <h5 class="conference">ICRA 2026</h5>
+            <h5 class="authors">
+                <a href="https://miyawakitomoya.com/" target="_blank" rel="noopener">Tomoya Miyawaki</a><sup>1</sup>
+                &nbsp;&nbsp;&nbsp;
+                <a href="https://kazuto1011.github.io/" target="_blank" rel="noopener">Kazuto Nakashima</a><sup>1</sup>
+                &nbsp;&nbsp;&nbsp;
+                <a href="https://www-robotics.jpl.nasa.gov/who-we-are/people/yumi_iwashita/" target="_blank" rel="noopener">Yumi Iwashita</a
+                ><sup>2</sup>
+                &nbsp;&nbsp;&nbsp;
+                <a href="https://robotics.ait.kyushu-u.ac.jp/kurazume/en/" target="_blank" rel="noopener">Ryo Kurazume</a><sup>1</sup>
+            </h5>
+            <h5 class="affiliations"><sup>1</sup>Kyushu University, Japan&nbsp;&nbsp;&nbsp;<sup>2</sup>Jet Propulsion Laboratory, USA</h5>
+            <div class="materials">
+                <a href="" class="btn btn-primary"><i class="fa-solid fa-file-pdf"></i> Paper</a>
+                <a href="https://github.com/miya-tomoya/drum" class="btn btn-primary"><i class="fa-brands fa-github"></i> Code</a>
+                <a href="" class="btn btn-primary disabled" aria-disabled="true"><i class="fa-solid fa-play"></i> Demo</a>
             </div>
         </div>
 
-        <h3>Semantic Segmentation</h3>
-        19-class semantic segmentation on SemanticKITTI dataset <span class="reference" data-ref="ran2024">[Ran et al. 2024]</span>.
-        <div style="display: flex; justify-content: center">
-            <video autoplay loop muted playsinline webkit-playsinline preload="auto" style="max-width: 100%; height: auto">
-                <source src="https://github.com/user-attachments/assets/bd8d4a87-ac6f-4464-99db-39e07ee866c9" type="video/mp4" />
-            </video>
+        <div class="container content">
+            <h5><b>TL;DR:</b> Sim2Real domain translation of LiDAR data using diffusion models.</h5>
         </div>
 
+        <div class="container content">
+            <h2>Overview</h2>
+            <p style="text-align: justify">
+                LiDAR-based semantic segmentation is a key component for autonomous mobile robots, yet large-scale annotation of LiDAR point clouds is
+                prohibitively expensive and time-consuming. Although simulators can provide labeled synthetic data, models trained on synthetic data
+                often underperform on real-world data due to a data-level domain gap. To address this issue, we propose DRUM, a novel Sim2Real
+                translation framework. We leverage a diffusion model pre-trained on unlabeled real-world data as a generative prior and translate
+                synthetic data by reproducing two key measurement characteristics: reflectance intensity and raydrop noise. To improve sample
+                fidelity, we introduce a raydrop-aware masked guidance mechanism that selectively enforces consistency with the input synthetic data
+                while preserving realistic raydrop noise induced by the diffusion prior. Experimental results demonstrate that DRUM consistently
+                improves Sim2Real performance across multiple representations of LiDAR data.
+            </p>
+        </div>
 
-    </div>
+        <div class="container content">
+            <h2>Goal: Sim2Real LiDAR Segmentation</h2>
 
-    <div class="container content">
-        <h2>Citation</h2>
-        <pre class="bibtex" style="text-align: left">
+            <p style="text-align: justify">
+                LiDAR simulators provide perfect segmentation labels but lack realistic sensor characteristics such as
+                <b>reflectance intensity</b> and <b>raydrop noise</b>, leading to a performance drop in real-world deployment. Our method
+                <b>DRUM</b> bridges this sim2real gap by synthesizing <b>pseudo-real</b> training samples that combine simulator-provided annotations
+                with learned realistic sensor characteristics.
+            </p>
+
+            <div class="goal-table-wrapper">
+                <table class="table table-hover align-middle mt-3 mb-4 goal-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th scope="col" style="width: 30%">Simulation</th>
+                            <th scope="col" style="width: 30%">Pseudo-real (ours)</th>
+                            <th scope="col" style="width: 30%">Real</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        <tr>
+                            <td class="table-active">Range</td>
+                            <td><img class="goal-image" src="images/sim-depth.png" alt="sim-depth" /></td>
+                            <td><img class="goal-image" src="images/pseudoreal-depth.png" alt="pseudoreal-depth" /></td>
+                            <td><img class="goal-image" src="images/real-depth.png" alt="real-depth" /></td>
+                        </tr>
+                        <tr>
+                            <td class="table-active">Reflectance<br />intensity</td>
+                            <td>N/A</td>
+                            <td><img class="goal-image" src="images/pseudoreal-reflectance.png" alt="pseudoreal-reflectance" /></td>
+                            <td><img class="goal-image" src="images/real-reflectance.png" alt="real-reflectance" /></td>
+                        </tr>
+                        <tr>
+                            <td class="table-active">Raydrop noise</td>
+                            <td>N/A</td>
+                            <td><img class="goal-image" src="images/pseudoreal-raydrop.png" alt="pseudoreal-raydrop" /></td>
+                            <td><img class="goal-image" src="images/real-raydrop.png" alt="real-raydrop" /></td>
+                        </tr>
+                        <tr>
+                            <td class="table-active">Semantic label</td>
+                            <td><img class="goal-image" src="images/label.png" alt="label" /></td>
+                            <td><img class="goal-image" src="images/label.png" alt="label" /></td>
+                            <td>N/A</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="container content">
+            <h2>Method: <span style="color: #5f53c7">DRUM</span></h2>
+
+            <h3>Posterior Sampling using Diffusion Models</h3>
+            <p style="text-align: justify">
+                We formulate Sim2Real LiDAR translation as a posterior sampling. First, we pre-train a <b> LiDAR diffusion model</b
+                ><span class="reference" data-ref="nakashima2024">[Nakashima+ 2024]</span> on real-world data to capture its underlying distribution,
+                which serves as a generative prior. We then condition the diffusion sampling process with the simulation sample via the proposed
+                <b>raydrop-aware masked guidance</b>.
+            </p>
+            <img
+                src="https://github.com/user-attachments/assets/0fb5d9b5-81c2-42f9-a58d-1da0d26d98d5"
+                alt="Posterior Sampling using Diffusion Models" />
+
+            <h3>Raydrop-aware Masked Guidance</h3>
+            <p style="text-align: justify">
+                Naïve conditioning suppresses realistic raydrop noise. In this work, we first generate the raydrop-aware mask \(m_t\) from the
+                tentative Tweedie's estimate \(\hat{x}_t\) and then compute the sim-real discrepancy based on the pseudoinverse method
+                <span class="reference" data-ref="song2023">[Song+ 2023]</span>. The operator \(H\) corrupts the reflectance modality.
+            </p>
+            <img src="https://github.com/user-attachments/assets/814e050f-468d-4c6d-9eba-9199ceb70a5e" alt="Raydrop-aware Masked Guidance" />
+        </div>
+
+        <div class="container content">
+            <h2>Results</h2>
+
+            <h3>Pseudo-real Samples</h3>
+            <div style="display: flex; justify-content: center">
+                <div class="video-compare">
+                    <img id="video-left" src="https://github.com/user-attachments/assets/1ecb4401-9880-4e5d-ae2e-30934ab88634" alt="sim" />
+                    <img id="video-right" src="https://github.com/user-attachments/assets/949ef848-3d17-4c8c-9ba6-b2f86044f995" alt="real" />
+                    <div id="slider"></div>
+                    <div class="caption-left">Simulation</div>
+                    <div class="caption-right">Real</div>
+                </div>
+            </div>
+
+            <h3>Semantic Segmentation</h3>
+            19-class semantic segmentation on real-world dataset <span class="reference" data-ref="behley2019">[Behley+ 2019]</span>.
+            <div style="display: flex; justify-content: center">
+                <video autoplay loop muted playsinline webkit-playsinline preload="auto" style="max-width: 100%; height: auto">
+                    <source src="https://github.com/user-attachments/assets/bd8d4a87-ac6f-4464-99db-39e07ee866c9" type="video/mp4" />
+                </video>
+            </div>
+        </div>
+
+        <div class="container content">
+            <h2>Citation</h2>
+            <pre class="bibtex" style="text-align: left">
 <code class="language-json">@inproceedings{miyawaki2026drum,
     title     = {{DRUM}: Diffusion-based Raydrop-aware Unapaired Mapping for Sim2Real {LiDAR} Segmentation},
     author    = {Tomoya Miyawaki and Kazuto Nakashima and Yumi Iwashita and Ryo Kurazume},
@@ -208,194 +193,144 @@
     pages     = {},
     year      = 2026
 }</code></pre>
-    </div>
+        </div>
 
-    <div class="container content">
-        <h2>Acknowledgments</h2>
-        <p>
-            This work was supported by
-            <span class="reference" data-ref="JP23K16974">JSPS KAKENHI Grant Number JP23K16974</span>
-            and <span class="reference" data-ref="JP20H00230">JSPS KAKENHI Grant Number JP20H00230</span>
-        </p>
-    </div>
+        <div class="container content">
+            <h2>Acknowledgments</h2>
+            <p>
+                This work was supported by
+                <span class="reference" data-ref="JP23K16974">JSPS KAKENHI Grant Number JP23K16974</span>
+                and <span class="reference" data-ref="JP20H00230">JSPS KAKENHI Grant Number JP20H00230</span>
+            </p>
+        </div>
 
-    <div class="references-data">
-        <div id="song2021">
-            <div id="bib">
-                <b>Score-Based Generative Modeling through Stochastic Differential Equations</b><br />
-                Yang Song, Jascha Sohl-Dickstein, Diederik P. Kingma, Abhishek Kumar, Stefano Ermon, Ben Poole<br />
-                ICLR 2021
+        <div class="references-data">
+            <div id="nakashima2024">
+                <div id="bib">
+                    <b>LiDAR Data Synthesis with Denoising Diffusion Probabilistic Models</b><br />
+                    Kazuto Nakashima, Ryo Kurazume<br />
+                    ICRA 2024
+                </div>
+                <div id="paper_url">https://arxiv.org/abs/2309.09256</div>
             </div>
-            <div id="paper_url">https://arxiv.org/abs/2209.03003</div>
-        </div>
-        <div id="liu2023">
-            <div id="bib">
-                <b>Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow</b><br />
-                Xingchao Liu, Chengyue Gong, Qiang Liu<br />
-                ICLR 2023
+            <div id="song2023">
+                <div id="bib">
+                    <b>Pseudoinverse-Guided Diffusion Models for Inverse Problems</b><br />
+                    Jiaming Song, Arash Vahdat, Morteza Mardani, Jan Kautz<br />
+                    ICLR 2020
+                </div>
+                <div id="paper_url">https://arxiv.org/abs/2006.11239</div>
             </div>
-            <div id="paper_url">https://arxiv.org/abs/2209.03003</div>
-        </div>
-        <div id="nakashima2023">
-            <div id="bib">
-                <b>Generative Range Imaging for Learning Scene Priors of 3D LiDAR Data</b><br />
-                Kazuto Nakashima, Yumi Iwashita, Ryo Kurazume<br />
-                WACV 2023
+            <div id="xiao2022">
+                <div id="bib">
+                    <b>Transfer learning from synthetic to real {LiDAR} point cloud for semantic segmentation</b><br />
+                    Aoran Xiao, Jiaxing Huang, Dayan Guan, Fangneng Zhan, Shijian Lu<br />
+                    AAAI 2022
+                </div>
+                <div id="paper_url">https://arxiv.org/abs/2109.13410</div>
             </div>
-            <div id="paper_url">https://arxiv.org/abs/2210.11750</div>
-        </div>
-        <div id="nakashima2024">
-            <div id="bib">
-                <b>LiDAR Data Synthesis with Denoising Diffusion Probabilistic Models</b><br />
-                Kazuto Nakashima, Ryo Kurazume<br />
-                ICRA 2024
+            <div id="liao2022">
+                <div id="bib">
+                    <b>KITTI-360: A Novel Dataset and Benchmarks for Urban Scene Understanding in 2D and 3D</b><br />
+                    Yiyi Liao, Jun Xie, Andreas Geiger<br />
+                    TPAMI 2022
+                </div>
+                <div id="paper_url">https://arxiv.org/abs/2109.13410</div>
             </div>
-            <div id="paper_url">https://arxiv.org/abs/2309.09256</div>
-        </div>
-        <div id="nakashima2025">
-            <div id="bib">
-                <b>Fast LiDAR Data Generation with Rectified Flows</b><br />
-                Kazuto Nakashima, Xiaowen Liu, Tomoya Miyawaki, Yumi Iwashita, Ryo Kurazume<br />
-                ICRA 2025
+            <div id="behley2019">
+                <div id="bib">
+                    <b>SemanticKITTI: A Dataset for Semantic Scene Understanding of LiDAR Sequences</b><br />
+                    Jens Behley, Martin Garbade, Andres Milioto, Jan Quenzel, Sven Behnke, Cyrill Stachniss, Juergen Gall<br />
+                    ICCV 2019
+                </div>
+                <div id="paper_url">https://arxiv.org/abs/2109.13410</div>
             </div>
-            <div id="paper_url">https://arxiv.org/abs/2412.02241</div>
-        </div>
-        <div id="zyrianov2022">
-            <div id="bib">
-                <b>Learning to Generate Realistic LiDAR Point Clouds</b><br />
-                Vlas Zyrianov, Xiyue Zhu, Shenlong Wang <br />
-                ECCV 2022
+            <div id="JP23K16974">
+                <div id="bib">
+                    <b>Development of a Realistic LiDAR Simulator based on Deep Generative Models</b><br />
+                    Kazuto Nakashima<br />
+                    Grant-in-Aid for Early-Career Scientists,<br />
+                    The Japan Society for the Promotion of Science (JSPS)
+                </div>
+                <div id="paper_url">https://kaken.nii.ac.jp/en/grant/KAKENHI-PROJECT-23K16974/</div>
             </div>
-            <div id="paper_url">https://arxiv.org/abs/2209.03954</div>
-        </div>
-        <div id="ran2024">
-            <div id="bib">
-                <b>Towards Realistic Scene Generation with LiDAR Diffusion Models</b><br />
-                Haoxi Ran, Vitor Guizilini, Yue Wang <br />
-                CVPR 2024
+            <div id="JP20H00230">
+                <div id="bib">
+                    <b>Development of garbage collecting robot for marine microplastics</b><br />
+                    Ryo Kurazume, Akihiro Kawamura, Qi An, Shoko Miyauchi, Kazuto Nakashima<br />
+                    Grant-in-Aid for Scientific Research (A),<br />
+                    The Japan Society for the Promotion of Science (JSPS)
+                </div>
+                <div id="paper_url">https://kaken.nii.ac.jp/en/grant/KAKENHI-PROJECT-20H00230/</div>
             </div>
-            <div id="paper_url">https://arxiv.org/abs/2404.00815</div>
         </div>
-        <div id="crowson2024">
-            <div id="bib">
-                <b>Scalable High-Resolution Pixel-Space Image Synthesis with Hourglass Diffusion Transformers</b><br />
-                Katherine Crowson, Stefan Andreas Baumann, Alex Birch, Tanishq Mathew Abraham, Daniel Z. Kaplan, Enrico
-                Shippole<br />
-                ICML 2024
-            </div>
-            <div id="paper_url">https://arxiv.org/abs/2401.11605</div>
-        </div>
-        <div id="rombach2022">
-            <div id="bib">
-                <b>High-Resolution Image Synthesis with Latent Diffusion Models</b><br />
-                Robin Rombach, Andreas Blattmann, Dominik Lorenz, Patrick Esser, Björn Ommer<br />
-                CVPR 2022
-            </div>
-            <div id="paper_url">https://arxiv.org/abs/2112.10752</div>
-        </div>
-        <div id="ho2020">
-            <div id="bib">
-                <b>Denoising Diffusion Probabilistic Models</b><br />
-                Jonathan Ho, Ajay Jain, Pieter Abbeel<br />
-                NeurIPS 2020
-            </div>
-            <div id="paper_url">https://arxiv.org/abs/2006.11239</div>
-        </div>
-        <div id="liao2022">
-            <div id="bib">
-                <b>KITTI-360: A Novel Dataset and Benchmarks for Urban Scene Understanding in 2D and 3D</b><br />
-                Yiyi Liao, Jun Xie, Andreas Geiger<br />
-                TPAMI 2022
-            </div>
-            <div id="paper_url">https://arxiv.org/abs/2109.13410</div>
-        </div>
-        <div id="JP23K16974">
-            <div id="bib">
-                <b>Development of a Realistic LiDAR Simulator based on Deep Generative Models</b><br />
-                Kazuto Nakashima<br />
-                Grant-in-Aid for Early-Career Scientists,<br />
-                The Japan Society for the Promotion of Science (JSPS)
-            </div>
-            <div id="paper_url">https://kaken.nii.ac.jp/en/grant/KAKENHI-PROJECT-23K16974/</div>
-        </div>
-        <div id="JP20H00230">
-            <div id="bib">
-                <b>Development of garbage collecting robot for marine microplastics</b><br />
-                Ryo Kurazume, Akihiro Kawamura, Qi An, Shoko Miyauchi, Kazuto Nakashima<br />
-                Grant-in-Aid for Scientific Research (A),<br />
-                The Japan Society for the Promotion of Science (JSPS)
-            </div>
-            <div id="paper_url">https://kaken.nii.ac.jp/en/grant/KAKENHI-PROJECT-20H00230/</div>
-        </div>
-    </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", (event) => {
-            const references = document.querySelectorAll(".reference");
-            references.forEach((reference) => {
-                const refId = reference.getAttribute("data-ref");
-                const refElement = document.getElementById(refId);
-                const tooltip = document.createElement("span");
-                tooltip.className = "reference-tooltip";
-                tooltip.innerHTML = refElement.querySelector("#bib").innerHTML;
-                reference.appendChild(tooltip);
-                reference.addEventListener("click", () => {
-                    const paperUrl = refElement.querySelector("#paper_url").innerHTML;
-                    window.open(paperUrl, "_blank");
-                });
-            });
-
-            const autoplayVideos = document.querySelectorAll("video[autoplay][muted]");
-            autoplayVideos.forEach((video) => {
-                video.playsInline = true;
-                const tryPlay = () => {
-                    video.play().catch(() => {
-                        // Ignore autoplay rejections on strict browser settings.
+        <script>
+            document.addEventListener("DOMContentLoaded", (event) => {
+                const references = document.querySelectorAll(".reference");
+                references.forEach((reference) => {
+                    const refId = reference.getAttribute("data-ref");
+                    const refElement = document.getElementById(refId);
+                    const tooltip = document.createElement("span");
+                    tooltip.className = "reference-tooltip";
+                    tooltip.innerHTML = refElement.querySelector("#bib").innerHTML;
+                    reference.appendChild(tooltip);
+                    reference.addEventListener("click", () => {
+                        const paperUrl = refElement.querySelector("#paper_url").innerHTML;
+                        window.open(paperUrl, "_blank");
                     });
-                };
-
-                video.addEventListener("loadeddata", tryPlay);
-                video.addEventListener("canplay", tryPlay);
-                document.addEventListener("visibilitychange", () => {
-                    if (!document.hidden) {
-                        tryPlay();
-                    }
                 });
 
-                tryPlay();
+                const autoplayVideos = document.querySelectorAll("video[autoplay][muted]");
+                autoplayVideos.forEach((video) => {
+                    video.playsInline = true;
+                    const tryPlay = () => {
+                        video.play().catch(() => {
+                            // Ignore autoplay rejections on strict browser settings.
+                        });
+                    };
+
+                    video.addEventListener("loadeddata", tryPlay);
+                    video.addEventListener("canplay", tryPlay);
+                    document.addEventListener("visibilitychange", () => {
+                        if (!document.hidden) {
+                            tryPlay();
+                        }
+                    });
+
+                    tryPlay();
+                });
+
+                const videos = document.querySelectorAll(".video-compare");
+                videos.forEach((container) => {
+                    const videoL = container.querySelector("#video-left");
+                    const videoR = container.querySelector("#video-right");
+                    const slider = container.querySelector("#slider");
+
+                    function moveSlider(e) {
+                        const rect = container.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const width = rect.width;
+                        const percentage = Math.max(0, Math.min(100, (x / width) * 100));
+                        slider.style.left = `${percentage}%`;
+                        videoL.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+                    }
+
+                    function moveSliderTouch(e) {
+                        const touch = e.touches[0];
+                        const rect = container.getBoundingClientRect();
+                        const x = touch.clientX - rect.left;
+                        const width = rect.width;
+                        const percentage = Math.max(0, Math.min(100, (x / width) * 100));
+                        slider.style.left = `${percentage}%`;
+                        videoL.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+                    }
+
+                    container.addEventListener("mousemove", moveSlider);
+                    container.addEventListener("touchstart", moveSliderTouch);
+                    container.addEventListener("touchmove", moveSliderTouch);
+                });
             });
-
-            const videos = document.querySelectorAll(".video-compare");
-            videos.forEach((container) => {
-                const videoL = container.querySelector("#video-left");
-                const videoR = container.querySelector("#video-right");
-                const slider = container.querySelector("#slider");
-
-                function moveSlider(e) {
-                    const rect = container.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const width = rect.width;
-                    const percentage = Math.max(0, Math.min(100, (x / width) * 100));
-                    slider.style.left = `${percentage}%`;
-                    videoL.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
-                }
-
-                function moveSliderTouch(e) {
-                    const touch = e.touches[0];
-                    const rect = container.getBoundingClientRect();
-                    const x = touch.clientX - rect.left;
-                    const width = rect.width;
-                    const percentage = Math.max(0, Math.min(100, (x / width) * 100));
-                    slider.style.left = `${percentage}%`;
-                    videoL.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
-                }
-
-                container.addEventListener("mousemove", moveSlider);
-                container.addEventListener("touchstart", moveSliderTouch);
-                container.addEventListener("touchmove", moveSliderTouch);
-            });
-        });
-    </script>
-</body>
-
+        </script>
+    </body>
 </html>
