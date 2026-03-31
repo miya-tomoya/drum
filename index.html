@@ -63,7 +63,7 @@
             </h5>
             <h5 class="affiliations"><sup>1</sup>Kyushu University, Japan&nbsp;&nbsp;&nbsp;<sup>2</sup>Jet Propulsion Laboratory, USA</h5>
             <div class="materials">
-                <a href="" class="btn btn-primary"><i class="fa-solid fa-file-pdf"></i> Paper</a>
+                <a href="https://arxiv.org/abs/2603.26263" class="btn btn-primary"><i class="fa-solid fa-file-pdf"></i> Paper</a>
                 <a href="https://github.com/miya-tomoya/drum" class="btn btn-primary"><i class="fa-brands fa-github"></i> Code</a>
                 <a href="" class="btn btn-primary disabled" aria-disabled="true"><i class="fa-solid fa-play"></i> Demo</a>
             </div>
@@ -74,7 +74,7 @@
         </div>
 
         <div class="container content">
-            <h2>Overview</h2>
+            <h2>Abstract</h2>
             <p style="text-align: justify">
                 LiDAR-based semantic segmentation is a key component for autonomous mobile robots, yet large-scale annotation of LiDAR point clouds is
                 prohibitively expensive and time-consuming. Although simulators can provide labeled synthetic data, models trained on synthetic data
@@ -91,8 +91,8 @@
             <h2>Goal: Sim2Real LiDAR Segmentation</h2>
 
             <p style="text-align: justify">
-                LiDAR simulators provide perfect segmentation labels but lack realistic sensor characteristics such as
-                <b>reflectance intensity</b> and <b>raydrop noise</b>, leading to a performance drop in real-world deployment. Our method
+                LiDAR simulators provide annotated training samples for semantic segmentation but lack realistic sensor characteristics such as
+                <b>reflectance intensity</b> and <b>raydrop noise</b>, leading to performance degradation in real-world deployment. Our method
                 <b>DRUM</b> bridges this sim2real gap by synthesizing <b>pseudo-real</b> training samples that combine simulator-provided annotations
                 with learned realistic sensor characteristics.
             </p>
@@ -142,9 +142,9 @@
 
             <h3>Posterior Sampling using Diffusion Models</h3>
             <p style="text-align: justify">
-                We formulate Sim2Real LiDAR translation as a posterior sampling. First, we pre-train a <b> LiDAR diffusion model</b
+                We perform Sim2Real LiDAR translation through posterior sampling. First, we pre-train a <b>LiDAR diffusion model</b
                 ><span class="reference" data-ref="nakashima2024">[Nakashima+ 2024]</span> on real-world data to capture its underlying distribution,
-                which serves as a generative prior. We then condition the diffusion sampling process with the simulation sample via the proposed
+                which serves as a generative prior. We then condition the diffusion sampling process on simulated samples using the proposed
                 <b>raydrop-aware masked guidance</b>.
             </p>
             <img
@@ -153,9 +153,9 @@
 
             <h3>Raydrop-aware Masked Guidance</h3>
             <p style="text-align: justify">
-                Naïve conditioning suppresses realistic raydrop noise. In this work, we first generate the raydrop-aware mask \(m_t\) from the
-                tentative Tweedie's estimate \(\hat{x}_t\) and then compute the sim-real discrepancy based on the pseudoinverse method
-                <span class="reference" data-ref="song2023">[Song+ 2023]</span>. The operator \(H\) corrupts the reflectance modality.
+                Naïve conditioning tends to suppress realistic raydrop noise. To address this, we first generate the raydrop-aware mask \(m_t\) from a
+                tentative Tweedie estimate \(\hat{x}_t\) and then compute the sim-real discrepancy based on the pseudoinverse method
+                <span class="reference" data-ref="song2023">[Song+ 2023]</span>. Here, the operator \(H\) corrupts the reflectance modality.
             </p>
             <img src="https://github.com/user-attachments/assets/814e050f-468d-4c6d-9eba-9199ceb70a5e" alt="Raydrop-aware Masked Guidance" />
         </div>
@@ -164,13 +164,17 @@
             <h2>Results</h2>
 
             <h3>Pseudo-real Samples</h3>
+            Simulation samples of the SynLiDAR dataset <span class="reference" data-ref="xiao2022">[Xiao+ 2022]</span> was translated using the
+            diffusion prior pre-trained on the real-world samples of the SemanticKITTI
+            <span class="reference" data-ref="behley2019">[Behley+ 2019]</span>
+            dataset.
             <div style="display: flex; justify-content: center">
                 <div class="video-compare">
                     <img id="video-left" src="https://github.com/user-attachments/assets/1ecb4401-9880-4e5d-ae2e-30934ab88634" alt="sim" />
                     <img id="video-right" src="https://github.com/user-attachments/assets/949ef848-3d17-4c8c-9ba6-b2f86044f995" alt="real" />
                     <div id="slider"></div>
-                    <div class="caption-left">Simulation</div>
-                    <div class="caption-right">Real</div>
+                    <div class="caption-left"><b>Simulation</b> (input)</div>
+                    <div class="caption-right"><b>Pseudo-real</b> (output)</div>
                 </div>
             </div>
 
@@ -217,7 +221,7 @@
                 <div id="bib">
                     <b>Pseudoinverse-Guided Diffusion Models for Inverse Problems</b><br />
                     Jiaming Song, Arash Vahdat, Morteza Mardani, Jan Kautz<br />
-                    ICLR 2020
+                    ICLR 2023
                 </div>
                 <div id="paper_url">https://arxiv.org/abs/2006.11239</div>
             </div>
