@@ -10,6 +10,7 @@ IEEE International Conference on Robotics and Automation (ICRA), 2026
 
 [![](https://img.shields.io/badge/arXiv-2603.26263-red?logo=arxiv)](https://arxiv.org/abs/2603.26263)
 [![](https://img.shields.io/badge/Website-DRUM-blue)](https://miya-tomoya.github.io/drum)
+[![](https://img.shields.io/badge/Demo-DRUM-yellow?logo=huggingface)](https://huggingface.co/spaces/kazuto1011/drum)
 
 ## Abstract
 
